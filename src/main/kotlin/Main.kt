@@ -1,11 +1,12 @@
-import solutions.*
-import java.io.File
+import solutions.Day
+import solutions.Day01
 
 fun main(args: Array<String>) {
     val arguments = argparse(args.toList())
-    val solutions: List<Day> = listOf(
-        Day01(1)
-    )
+    val solutions: List<Day> =
+        listOf(
+            Day01(1),
+        )
 
     val runPart =
         arguments
@@ -47,23 +48,27 @@ fun argparse(args: List<String>): Map<String, List<String>> =
 fun runDays(
     days: List<Int>,
     parts: List<Int>,
-    solutions: List<Day>
+    solutions: List<Day>,
 ): Map<Int, List<String>> {
     val solutionsToRun = solutions.filter { day: Day -> day.currentDay in days }
     return solutionsToRun
         .fold(emptyMap<Int, List<String>>()) { map, elem ->
             var allTestsPassed = true
-            map + Pair(
-                elem.currentDay, 
-                parts.flatMap { partNum: Int ->
-                    elem.testInputs[partNum]!!
-                        .map { (input, expected) ->
-                            elem.solve(partNum, input).let { output: String ->
-                                if (output == expected) "Test Passed"
-                                else "Test failed. Output:\n$output\nExpected:\n$expected".also { allTestsPassed = false }
-                            }
-                        } + if (allTestsPassed) listOf("Problem $partNum Output:\n${elem.solve(partNum, elem.input)}") else emptyList()
-                }
-            )
+            map +
+                Pair(
+                    elem.currentDay,
+                    parts.flatMap { partNum: Int ->
+                        elem.testInputs[partNum]!!
+                            .map { (input, expected) ->
+                                elem.solve(partNum, input).let { output: String ->
+                                    if (output == expected) {
+                                        "Test Passed"
+                                    } else {
+                                        "Test failed. Output:\n$output\nExpected:\n$expected".also { allTestsPassed = false }
+                                    }
+                                }
+                            } + if (allTestsPassed) listOf("Problem $partNum Output:\n${elem.solve(partNum, elem.input)}") else emptyList()
+                    },
+                )
         }
 }
