@@ -14,11 +14,12 @@ class Day02(day: Int) : Day(day) {
 
     override fun solvePart2(input: String): String =
         parseInput(input)
-            .fold(0) { currentSum, gameSets ->
-                currentSum + listOf("red", "green", "blue").fold(1) { accumulator, color ->
+            .sumOf { gameSets ->
+                listOf("red", "green", "blue").fold(1) { accumulator, color ->
                     accumulator * gameSets.flatMap { listOf(it.getOrDefault(color, 0)) }.max()
-                }
-            }.toString()
+                }.toInt()
+            }
+            .toString()
 
     private fun parseInput(input: String): List<List<Map<String, Int>>> =
         input.lines()
