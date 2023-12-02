@@ -22,8 +22,7 @@ class Day01(day: Int) : Day(day) {
     }
 
     private fun getCalibrationValues(input: String) =
-        input
-            .lines()
+        input.lines()
             .fold(0) { currentSum: Int, line: String ->
                 currentSum +
                     (

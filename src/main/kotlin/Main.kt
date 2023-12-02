@@ -24,7 +24,7 @@ fun main(args: Array<String>) {
     val outputs = runDays(toRun, runPart, solutions)
 
     for ((day, output) in outputs.toSortedMap()) {
-        println("Output Day $day:")
+        println("Executing Day $day:")
         output.forEach {
             println(it)
         }
@@ -52,25 +52,36 @@ fun runDays(
     parts: List<Int>,
     solutions: List<Day>,
 ): Map<Int, List<String>> {
-    val solutionsToRun = solutions.filter { day: Day -> day.currentDay in days }
-    return solutionsToRun
-        .fold(emptyMap<Int, List<String>>()) { map, elem ->
-            var allTestsPassed = true
-            map +
-                Pair(
-                    elem.currentDay,
-                    parts.flatMap { partNum: Int ->
-                        elem.testInputs[partNum]!!
-                            .map { (input, expected) ->
-                                elem.solve(partNum, input).let { output: String ->
-                                    if (output == expected) {
-                                        "Test Passed"
-                                    } else {
-                                        "Test failed. Output:\n$output\nExpected:\n$expected".also { allTestsPassed = false }
-                                    }
-                                }
-                            } + if (allTestsPassed) listOf("Problem $partNum Output:\n${elem.solve(partNum, elem.input)}") else emptyList()
-                    },
-                )
+    return solutions
+        .filter { day: Day -> day.currentDay in days }
+        .fold(emptyMap<Int, List<String>>()) { map, elem -> map + runDay(elem, parts) }
+}
+
+fun runDay(
+    day: Day,
+    parts: List<Int>,
+): Pair<Int, List<String>> {
+    var allTestsPassed = true
+    val outputs = mutableListOf<String>()
+    for (partNum in parts) {
+        val partOutputs =
+            day.testInputs[partNum]
+                ?.map { (input, expected) ->
+                    day.solve(partNum, input).let { output ->
+                        if (output == expected) {
+                            "Test Passed"
+                        } else {
+                            allTestsPassed = false
+                            "Test Failed. Output:\n$output\nExpected:\n$expected"
+                        }
+                    }
+                }?.toMutableList() ?: emptyList<String>().toMutableList()
+
+        if (allTestsPassed) {
+            partOutputs.add("Problem $partNum Output:\n${day.solve(partNum, day.input)}")
         }
+
+        outputs += partOutputs
+    }
+    return day.currentDay to outputs.toList()
 }
