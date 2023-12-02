@@ -1,11 +1,13 @@
 import solutions.Day
 import solutions.Day01
+import solutions.Day02
 
 fun main(args: Array<String>) {
     val arguments = argparse(args.toList())
     val solutions: List<Day> =
         listOf(
             Day01(1),
+            Day02(2),
         )
 
     val runPart =

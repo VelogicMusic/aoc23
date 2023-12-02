@@ -13,7 +13,7 @@ abstract class Day(val currentDay: Int) {
      * Automatically load test input for respective day
      * */
     val testInputs: Map<Int, Map<String, String>> =
-        File("src/main/resources/day01")
+        File("src/main/resources/day$dayString")
             .walk()
             .filter { "test" in it.toString() }
             .fold<File, Map<Int, Map<String, String>>>(emptyMap()) { map, filePath ->
