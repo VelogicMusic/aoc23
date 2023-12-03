@@ -13,7 +13,7 @@ class Number(val value: Int, row: Int, column: Int) : SchematicEntry(row, column
             else -> false
         }
 
-    override fun hashCode(): Int = value * row
+    override fun hashCode(): Int = 1337 * row + value
 }
 
 class Symbol(val value: Char, row: Int, column: Int) : SchematicEntry(row, column)
@@ -26,8 +26,7 @@ class Day03(day: Int) : Day(day) {
         return numbers
             .filter { number -> symbols.any { it.overlaps(number) } }
             .toSet()
-            .map { number -> number.value }
-            .sum()
+            .sumOf { number -> number.value }
             .toString()
     }
 
@@ -55,7 +54,7 @@ class Day03(day: Int) : Day(day) {
                     continue
                 }
                 currentNum = null
-                if (line.substring(columnIndex, columnIndex + 1) == ".") {
+                if (line[columnIndex] == '.') {
                     continue
                 }
                 schematics.add(Symbol(line[columnIndex], rowIndex, columnIndex))
