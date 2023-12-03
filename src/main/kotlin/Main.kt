@@ -21,7 +21,7 @@ fun main(args: Array<String>) {
     val toRun =
         (arguments["d"].orEmpty() + arguments["day"].orEmpty())
             .map { it.toInt() }
-            .let { it.ifEmpty { listOf(1, 2) } }
+            .let { it.ifEmpty { 1..solutions.size }.toList() }
 
     val outputs = runDays(toRun, runPart, solutions)
 
