@@ -3,6 +3,7 @@ import solutions.Day01
 import solutions.Day02
 import solutions.Day03
 import solutions.Day04
+import solutions.Day06
 
 fun main(args: Array<String>) {
     val arguments = argparse(args.toList())
@@ -12,6 +13,7 @@ fun main(args: Array<String>) {
             Day02(2),
             Day03(3),
             Day04(4),
+            Day06(6),
         )
 
     val runPart =
