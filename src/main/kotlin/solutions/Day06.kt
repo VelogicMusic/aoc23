@@ -11,7 +11,7 @@ class Day06(day: Int) : Day(day) {
             .map { (time, distance) ->
                 (0..time).filter { (time - it) * it > distance }.size
             }
-            .reduce { acc, i -> acc * i}
+            .reduce { acc, i -> acc * i }
             .toString()
     }
 
@@ -19,8 +19,10 @@ class Day06(day: Int) : Day(day) {
         return input.split("\n")
             .map { inp -> inp.substringAfter(":") }
             .map { inp -> inp.replace("\\s".toRegex(), "") }
-            .let { it.first().toInt() to it.last().toLong() }
-            .let { (time, distance) -> (0..time).count { (time - it) * it > distance } }
+            .let { it.first().toLong() to it.last().toLong() }
+            .let { (time, distance) ->
+                (0..time).count { (time - it) * it > distance }
+            }
             .toString()
     }
 }
