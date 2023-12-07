@@ -2,13 +2,13 @@ package solutions
 
 data class TranslationMap(val mappings: Set<SingleMapping>) {
     fun getMappingDest(number: Long): Long {
-        return mappings.firstOrNull { mapping -> number in mapping.src until mapping.src + mapping.range }?.let { mapping ->
+        return mappings.firstOrNull { mapping -> number in mapping.src..<mapping.src + mapping.range }?.let { mapping ->
             mapping.dest + (number - mapping.src)
         } ?: number
     }
 
     fun getMappingSrc(number: Long): Long {
-        return mappings.firstOrNull { mapping -> number in mapping.dest until mapping.dest + mapping.range }?.let { mapping ->
+        return mappings.firstOrNull { mapping -> number in mapping.dest..<mapping.dest + mapping.range }?.let { mapping ->
             mapping.src + (number - mapping.dest)
         } ?: number
     }
@@ -20,8 +20,7 @@ class Day05(day: Int) : Day(day) {
     override fun solvePart1(input: String): String {
         val (seeds, translationMaps) = parse(input)
         return seeds
-            .minOf {
-                    seed ->
+            .minOf { seed ->
                 translationMaps.fold(seed) { prevNum, translationMap -> translationMap.getMappingDest(prevNum) }
             }
             .toString()
@@ -29,11 +28,13 @@ class Day05(day: Int) : Day(day) {
 
     override fun solvePart2(input: String): String {
         val (tmpSeeds, tmpTranslationMaps) = parse(input)
-        val seeds = tmpSeeds.chunked(2).map { (src, range) -> src until src + range }
+        val seeds = tmpSeeds.chunked(2).map { (src, range) -> src..<src + range }
         val translationMaps = tmpTranslationMaps.reversed()
         var seedTry = 0L
         while (true) {
-            val possibleSeed = translationMaps.fold(seedTry) { num, translationMap -> translationMap.getMappingSrc(num) }
+            val possibleSeed =
+                translationMaps
+                    .fold(seedTry) { num, translationMap -> translationMap.getMappingSrc(num) }
             if (seeds.any { seed -> seed.contains(possibleSeed) }) {
                 return seedTry.toString()
             }

@@ -16,7 +16,7 @@ abstract class Day(val currentDay: Int) {
         File("src/main/resources/day$dayString")
             .walk()
             .filter { "test" in it.toString() }
-            .fold<File, Map<Int, Map<String, String>>>(emptyMap()) { map, filePath ->
+            .fold(emptyMap()) { map, filePath ->
                 map +
                     Pair(
                         Regex("part(\\d*)").find(filePath.toString())!!.groups[1]!!.component1().toInt(),

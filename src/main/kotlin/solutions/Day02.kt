@@ -25,15 +25,12 @@ class Day02(day: Int) : Day(day) {
 
     private fun parseInput(input: String): List<List<Map<String, Int>>> =
         input.lines()
+            .map { game -> game.substringAfter(": ") }
             .map { game ->
-                game.substringAfter(": ")
-                    .split("; ")
-                    .map { gameSet ->
-                        gameSet
-                            .split(", ")
-                            .associate { colorCount ->
-                                colorCount.split(" ").let { (count, color) -> color to count.toInt() }
-                            }
+                game.split("; ").map { gameSet ->
+                    gameSet.split(", ").associate { colorCount ->
+                        colorCount.split(" ").let { (count, color) -> color to count.toInt() }
                     }
+                }
             }
 }
