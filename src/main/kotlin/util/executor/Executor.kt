@@ -45,7 +45,7 @@ class Executor() {
                 print("Running Test Input on Part ${input.part.number}: ")
                 result = runInput(day, input)
                 when (result) {
-                    is Result.Success -> println("Test Passed!")
+                    is Result.Success -> println("Test Passed! (execution time: ${result.value.time}ms)")
                     is Result.Failure -> println(result.reason)
                 }
             }
@@ -53,7 +53,7 @@ class Executor() {
                 print("Running Puzzle Input on Part ${input.part.number}: ")
                 result = runInput(day, input)
                 when (result) {
-                    is Result.Success -> println(result.value.returnValue).also { println("Execution time: ${result.value.time}ms") }
+                    is Result.Success -> println("${result.value.returnValue} (execution time: ${result.value.time}ms)")
                     else -> throw IllegalStateException("There should not be a failure when running the puzzle input")
                 }
             }
