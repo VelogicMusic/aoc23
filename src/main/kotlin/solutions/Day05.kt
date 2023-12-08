@@ -1,5 +1,7 @@
 package solutions
 
+import util.Input
+
 data class TranslationMap(val mappings: Set<SingleMapping>) {
     fun getMappingDest(number: Long): Long {
         return mappings.firstOrNull { mapping -> number in mapping.src..<mapping.src + mapping.range }?.let { mapping ->
@@ -16,8 +18,8 @@ data class TranslationMap(val mappings: Set<SingleMapping>) {
 
 data class SingleMapping(val dest: Long, val src: Long, val range: Long)
 
-class Day05(day: Int) : Day(day) {
-    override fun solvePart1(input: String): String {
+class Day05 : Day(5) {
+    override fun solvePart1(input: Input): String {
         val (seeds, translationMaps) = parse(input)
         return seeds
             .minOf { seed ->
@@ -26,7 +28,7 @@ class Day05(day: Int) : Day(day) {
             .toString()
     }
 
-    override fun solvePart2(input: String): String {
+    override fun solvePart2(input: Input): String {
         val (tmpSeeds, tmpTranslationMaps) = parse(input)
         val seeds = tmpSeeds.chunked(2).map { (src, range) -> src..<src + range }
         val translationMaps = tmpTranslationMaps.reversed()
@@ -42,14 +44,14 @@ class Day05(day: Int) : Day(day) {
         }
     }
 
-    private fun parse(input: String): Pair<Set<Long>, List<TranslationMap>> {
+    private fun parse(input: Input): Pair<Set<Long>, List<TranslationMap>> {
         val seeds =
-            input.substringBefore("\n\n").substringAfter(": ").split(" ")
+            input.text.substringBefore("\n\n").substringAfter(": ").split(" ")
                 .map { it.toLong() }
                 .toSet()
 
         val translationMaps =
-            input.substringAfter("\n\n").split("\n\n")
+            input.text.substringAfter("\n\n").split("\n\n")
                 .map { mapping ->
                     mapping.substringAfter(":\n").split("\n")
                         .map { line -> line.split(" ").map { it.toLong() } }

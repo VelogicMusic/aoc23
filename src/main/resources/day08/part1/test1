@@ -3,6 +3,3 @@ LLR
 AAA = (BBB, BBB)
 BBB = (AAA, ZZZ)
 ZZZ = (ZZZ, ZZZ)L
-
-Expected Result:
-6

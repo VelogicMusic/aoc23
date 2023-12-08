@@ -1,9 +1,11 @@
 package solutions
 
-class Day06(day: Int) : Day(day) {
-    override fun solvePart1(input: String): String {
+import util.Input
+
+class Day06 : Day(6) {
+    override fun solvePart1(input: Input): String {
         val races =
-            input.split("\n")
+            input.text.split("\n")
                 .map { inp -> Regex("\\d+").findAll(inp) }
                 .map { regex -> regex.map { r -> r.value.toInt() }.toList() }
                 .let { it.first() zip it.last() }
@@ -15,8 +17,8 @@ class Day06(day: Int) : Day(day) {
             .toString()
     }
 
-    override fun solvePart2(input: String): String {
-        return input.split("\n")
+    override fun solvePart2(input: Input): String {
+        return input.text.split("\n")
             .map { inp -> inp.substringAfter(":") }
             .map { inp -> inp.replace("\\s".toRegex(), "") }
             .let { it.first().toLong() to it.last().toLong() }

@@ -1,5 +1,6 @@
 package solutions
 
+import util.Input
 import kotlin.math.absoluteValue
 
 sealed class SchematicEntry(val row: Int, val column: Int) {
@@ -18,8 +19,8 @@ class Number(val value: Int, row: Int, column: Int) : SchematicEntry(row, column
 
 class Symbol(val value: Char, row: Int, column: Int) : SchematicEntry(row, column)
 
-class Day03(day: Int) : Day(day) {
-    override fun solvePart1(input: String): String {
+class Day03 : Day(3) {
+    override fun solvePart1(input: Input): String {
         val parsedInput = parse(input)
         val symbols = parsedInput.filterIsInstance<Symbol>()
         val numbers = parsedInput.filterIsInstance<Number>()
@@ -30,7 +31,7 @@ class Day03(day: Int) : Day(day) {
             .toString()
     }
 
-    override fun solvePart2(input: String): String {
+    override fun solvePart2(input: Input): String {
         val parsedInput = parse(input)
         val gears = parsedInput.filterIsInstance<Symbol>().filter { it.value == '*' }
         val numbers = parsedInput.filterIsInstance<Number>()
@@ -42,9 +43,9 @@ class Day03(day: Int) : Day(day) {
             .toString()
     }
 
-    private fun parse(input: String): List<SchematicEntry> {
+    private fun parse(input: Input): List<SchematicEntry> {
         val schematics = mutableListOf<SchematicEntry>()
-        for ((rowIndex, line) in input.lines().withIndex()) {
+        for ((rowIndex, line) in input.lines.withIndex()) {
             var currentNum: Int? = null
             for (columnIndex in line.indices) {
                 val intRegex = Regex("^\\d+").find(line.substring(columnIndex, line.length))

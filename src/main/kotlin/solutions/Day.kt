@@ -1,5 +1,9 @@
 package solutions
 
+import util.Input
+import util.Part
+import util.PuzzleInput
+import util.TestInput
 import java.io.File
 
 abstract class Day(val currentDay: Int) {
@@ -10,46 +14,19 @@ abstract class Day(val currentDay: Int) {
         get() = currentDay.toString().padStart(2, '0')
 
     /**
-     * Automatically load test input for respective day
-     * */
-    val testInputs: Map<Int, Map<String, String>> =
-        File("src/main/resources/day$dayString")
-            .walk()
-            .filter { "test" in it.toString() }
-            .fold(emptyMap()) { map, filePath ->
-                map +
-                    Pair(
-                        Regex("part(\\d*)").find(filePath.toString())!!.groups[1]!!.component1().toInt(),
-                        mapOf(
-                            File(filePath.toString())
-                                .readText()
-                                .split("\n\nExpected Result:\n".toRegex())
-                                .map { it.trim() }
-                                .zipWithNext()
-                                .first(),
-                        ),
-                    )
-            }
-
-    /**
-     * Automatically load puzzle input for respective day
-     * */
-    open val input: String = File("src/main/resources/day$dayString/input").bufferedReader().readText().trim()
-
-    /**
      * Wrapper function to call respective solve function
      * */
-    fun solve(
-        part: Int,
-        input: String,
-    ): String =
-        when (part) {
-            1 -> solvePart1(input)
-            2 -> solvePart2(input)
-            else -> throw IllegalArgumentException("Part does not exist")
+    fun solve(input: Input): String =
+        when (input.part) {
+            Part.PART_1 -> solvePart1(input)
+            Part.PART_2 -> solvePart2(input)
         }
 
-    abstract fun solvePart1(input: String): String
+    abstract fun solvePart1(input: Input): String
 
-    abstract fun solvePart2(input: String): String
+    abstract fun solvePart2(input: Input): String
+
+    companion object {
+        const val RESOURCE_DIR = "src/main/resources"
+    }
 }

@@ -1,10 +1,11 @@
 package solutions
 
+import util.Input
 import kotlin.math.min
 import kotlin.math.pow
 
-class Day04(day: Int) : Day(day) {
-    override fun solvePart1(input: String): String {
+class Day04 : Day(4) {
+    override fun solvePart1(input: Input): String {
         val commonNumbers = parse(input)
         return commonNumbers
             .filter { numberSet -> numberSet.isNotEmpty() }
@@ -12,7 +13,7 @@ class Day04(day: Int) : Day(day) {
             .toString()
     }
 
-    override fun solvePart2(input: String): String {
+    override fun solvePart2(input: Input): String {
         val scratchCardSum = mutableMapOf<Int, Int>()
         val parsedInput = parse(input)
         val maxIndex = parsedInput.size + 1
@@ -34,8 +35,8 @@ class Day04(day: Int) : Day(day) {
             .map { numString -> numString.trim().toInt() }
             .toSet()
 
-    private fun parse(input: String): List<Set<Int>> =
-        input.lines()
+    private fun parse(input: Input): List<Set<Int>> =
+        input.lines
             .map { line -> line.substringAfter(": ") }
             .map { numbers -> numbers.split("|") }
             .map { (numSet1, numSet2) -> getNumbers(numSet1) intersect getNumbers(numSet2) }

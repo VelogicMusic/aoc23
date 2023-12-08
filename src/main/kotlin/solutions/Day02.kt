@@ -1,7 +1,9 @@
 package solutions
 
-class Day02(day: Int) : Day(day) {
-    override fun solvePart1(input: String): String =
+import util.Input
+
+class Day02 : Day(2) {
+    override fun solvePart1(input: Input): String =
         parseInput(input)
             .withIndex()
             .filter { (_, gameSets) ->
@@ -14,7 +16,7 @@ class Day02(day: Int) : Day(day) {
             .sumOf { (index) -> index + 1 }
             .toString()
 
-    override fun solvePart2(input: String): String =
+    override fun solvePart2(input: Input): String =
         parseInput(input)
             .sumOf { gameSets ->
                 listOf("red", "green", "blue").fold(1) { accumulator, color ->
@@ -23,8 +25,8 @@ class Day02(day: Int) : Day(day) {
             }
             .toString()
 
-    private fun parseInput(input: String): List<List<Map<String, Int>>> =
-        input.lines()
+    private fun parseInput(input: Input): List<List<Map<String, Int>>> =
+        input.lines
             .map { game -> game.substringAfter(": ") }
             .map { game ->
                 game.split("; ").map { gameSet ->

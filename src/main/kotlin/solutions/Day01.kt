@@ -1,10 +1,12 @@
 package solutions
 
-class Day01(day: Int) : Day(day) {
-    override fun solvePart1(input: String): String = getCalibrationValues(input)
+import util.Input
 
-    override fun solvePart2(input: String): String {
-        var transformedInput = input
+class Day01 : Day(1) {
+    override fun solvePart1(input: Input): String = getCalibrationValues(input.text)
+
+    override fun solvePart2(input: Input): String {
+        var transformedInput = input.text
         mapOf(
             "one" to "one1one",
             "two" to "two2two",

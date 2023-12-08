@@ -1,4 +1,3 @@
-import solutions.Day08
 import solutions.Day
 import solutions.Day01
 import solutions.Day02
@@ -7,41 +6,45 @@ import solutions.Day04
 import solutions.Day05
 import solutions.Day06
 import solutions.Day07
+import solutions.Day08
+import util.InputReader
+import util.executor.Executor
 
 fun main(args: Array<String>) {
     val arguments = argparse(args.toList())
-    val solutions: List<Day> =
+    val solutions =
         listOf(
-            Day01(1),
-            Day02(2),
-            Day03(3),
-            Day04(4),
-            Day05(5),
-            Day06(6),
-            Day07(7),
-            Day08(8),
-        )
+            Day01(),
+            Day02(),
+            Day03(),
+            Day04(),
+            Day05(),
+            Day06(),
+            Day07(),
+            Day08(),
+        ).mapIndexed { index: Int, day: Day -> index + 1 to day }.toMap()
 
-    val runPart =
+    val executor = Executor()
+
+    val dayInputs =
+        (arguments["d"].orEmpty() + arguments["day"].orEmpty())
+            .map { it.toInt() }
+            .filter { num -> num in solutions.keys }
+            .ifEmpty { solutions.keys }.toList()
+            .onEach { day -> executor.addDay(solutions[day]!!)}
+            .map { day -> InputReader.getInputs(day) }
+
+    val partsToRun =
         arguments
             .filter { (key, _) -> key == "p" || key == "part" }
             .flatMap { (_, value) -> value.map { it.toInt() } }
             .let { it.ifEmpty { listOf(1, 2) } }
 
-    val toRun =
-        (arguments["d"].orEmpty() + arguments["day"].orEmpty())
-            .map { it.toInt() }
-            .let { it.ifEmpty { 1..solutions.size }.toList() }
+    dayInputs
+        .flatMap { singleDayInputs -> singleDayInputs.filter { dayInput -> dayInput.part.number in partsToRun}}
+        .forEach { input -> executor.addInput(input) }
 
-    val outputs = runDays(toRun, runPart, solutions)
-
-    for ((day, output) in outputs.toSortedMap()) {
-        println("Executing Day $day:")
-        output.forEach {
-            println(it)
-        }
-        println()
-    }
+    executor.execute()
 }
 
 fun argparse(args: List<String>): Map<String, List<String>> =
@@ -58,42 +61,3 @@ fun argparse(args: List<String>): Map<String, List<String>> =
             )
         }
     }.first
-
-fun runDays(
-    days: List<Int>,
-    parts: List<Int>,
-    solutions: List<Day>,
-): Map<Int, List<String>> {
-    return solutions
-        .filter { day: Day -> day.currentDay in days }
-        .fold(emptyMap<Int, List<String>>()) { map, elem -> map + runDay(elem, parts) }
-}
-
-fun runDay(
-    day: Day,
-    parts: List<Int>,
-): Pair<Int, List<String>> {
-    var allTestsPassed = true
-    val outputs = mutableListOf<String>()
-    for (partNum in parts) {
-        val partOutputs =
-            day.testInputs[partNum]
-                ?.map { (input, expected) ->
-                    day.solve(partNum, input).let { output ->
-                        if (output == expected) {
-                            "Test Passed"
-                        } else {
-                            allTestsPassed = false
-                            "Test Failed. Output:\n$output\nExpected:\n$expected"
-                        }
-                    }
-                }?.toMutableList() ?: emptyList<String>().toMutableList()
-
-        if (allTestsPassed) {
-            partOutputs.add("Problem $partNum Output:\n${day.solve(partNum, day.input)}")
-        }
-
-        outputs += partOutputs
-    }
-    return day.currentDay to outputs.toList()
-}

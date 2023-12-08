@@ -1,14 +1,15 @@
 package solutions
 
+import util.Input
 import kotlin.math.max
 
-class Day08(day: Int) : Day(day) {
-    override fun solvePart1(input: String): String {
+class Day08 : Day(8) {
+    override fun solvePart1(input: Input): String {
         val (sequence, mappings) = parse(input)
         return findExit(sequence, mappings, "AAA", "ZZZ").toString()
     }
 
-    override fun solvePart2(input: String): String {
+    override fun solvePart2(input: Input): String {
         val (sequence, mappings) = parse(input)
         val currentNodes =
             mappings
@@ -53,10 +54,10 @@ class Day08(day: Int) : Day(day) {
         }
     }
 
-    private fun parse(input: String): Pair<String, Map<String, Map<Char, String>>> {
-        val charSequence = input.substringBefore("\n\n")
+    private fun parse(input: Input): Pair<String, Map<String, Map<Char, String>>> {
+        val charSequence = input.text.substringBefore("\n\n")
         val mapping = mutableMapOf<String, Map<Char, String>>()
-        for (line in input.substringAfter("\n\n").lines()) {
+        for (line in input.text.substringAfter("\n\n").lines()) {
             val (inpString, rest) = line.split(" = (")
             val (left, right) = rest.substringBefore(")").split(", ")
             mapping[inpString] = mapOf('L' to left, 'R' to right)

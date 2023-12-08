@@ -1,5 +1,7 @@
 package solutions
 
+import util.Input
+
 sealed class Hand(val cards: String, val bid: Int) : Comparable<Hand> {
     abstract val strengthMap: Map<Char, Int>
 
@@ -62,10 +64,10 @@ class HandPart2(cards: String, bid: Int) : Hand(cards, bid) {
     }
 }
 
-class Day07(day: Int) : Day(day) {
-    override fun solvePart1(input: String): String {
+class Day07 : Day(7) {
+    override fun solvePart1(input: Input): String {
         val hands =
-            input.lines()
+            input.lines
                 .map { line -> line.split(" ").let { (hand, bid) -> HandPart1(hand, bid.toInt()) } }
         return hands.sorted()
             .mapIndexed { index, hand -> (index + 1) * hand.bid }
@@ -73,9 +75,9 @@ class Day07(day: Int) : Day(day) {
             .toString()
     }
 
-    override fun solvePart2(input: String): String {
+    override fun solvePart2(input: Input): String {
         val hands =
-            input.lines()
+            input.lines
                 .map { line -> line.split(" ").let { (hand, bid) -> HandPart2(hand, bid.toInt()) } }
         return hands.sorted()
             .mapIndexed { index, hand -> (index + 1) * hand.bid }
