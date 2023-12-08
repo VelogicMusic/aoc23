@@ -1,3 +1,4 @@
+import solutions.Day08
 import solutions.Day
 import solutions.Day01
 import solutions.Day02
@@ -18,6 +19,7 @@ fun main(args: Array<String>) {
             Day05(5),
             Day06(6),
             Day07(7),
+            Day08(8),
         )
 
     val runPart =
