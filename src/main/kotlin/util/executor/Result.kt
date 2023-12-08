@@ -1,5 +1,8 @@
 package util.executor
 
+/**
+ * Simple Result Monad Implementation used to get results when executing functions
+ */
 sealed class Result<out T> {
     data class Success<T>(val value: T) : Result<T>()
 

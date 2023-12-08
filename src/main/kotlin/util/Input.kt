@@ -3,6 +3,9 @@ package util
 import java.io.File
 import kotlin.streams.toList
 
+/**
+ * Enums for each part
+ */
 enum class Part {
     PART_1 {
         override val number = 1
@@ -17,6 +20,12 @@ enum class Part {
     abstract val dirString: String
 }
 
+/**
+ * Base class for inputs
+ * @param day day corresponding to input
+ * @param part corresponding [Part] for input
+ * @param fileName path of the input file
+ */
 sealed class Input(val day: Int, val part: Part, fileName: String) {
     private val inputReader = File(fileName).bufferedReader()
 
@@ -25,16 +34,30 @@ sealed class Input(val day: Int, val part: Part, fileName: String) {
     val lines = text.lines()
 }
 
+/**
+ * Class describing test input
+ * Additionally reads the expected result from the fileName.expected file
+ */
 class TestInput(day: Int, part: Part, fileName: String) : Input(day, part, fileName) {
     private val resultReader = File("$fileName.expected").bufferedReader()
     val expectedResult = resultReader.readText().trim()
 }
 
+/**
+ * Class describing Puzzle input
+ */
 class PuzzleInput(day: Int, part: Part, fileName: String) : Input(day, part, fileName)
 
+/**
+ * Factory to generate input objects
+ */
 object InputReader {
     private const val RESOURCE_DIR = "src/main/resources"
 
+    /**
+     * Gets all input files for a given [day]
+     * @param day specify the date for input files
+     */
     fun getInputs(day: Int): List<Input> {
         val dayString = day.toString().padStart(2, '0')
         val puzzleInputs =

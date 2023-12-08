@@ -31,7 +31,7 @@ fun main(args: Array<String>) {
             .map { it.toInt() }
             .filter { num -> num in solutions.keys }
             .ifEmpty { solutions.keys }.toList()
-            .onEach { day -> executor.addDay(solutions[day]!!)}
+            .onEach { day -> executor.addDay(solutions[day]!!) }
             .map { day -> InputReader.getInputs(day) }
 
     val partsToRun =
@@ -41,7 +41,7 @@ fun main(args: Array<String>) {
             .let { it.ifEmpty { listOf(1, 2) } }
 
     dayInputs
-        .flatMap { singleDayInputs -> singleDayInputs.filter { dayInput -> dayInput.part.number in partsToRun}}
+        .flatMap { singleDayInputs -> singleDayInputs.filter { dayInput -> dayInput.part.number in partsToRun } }
         .forEach { input -> executor.addInput(input) }
 
     executor.execute()

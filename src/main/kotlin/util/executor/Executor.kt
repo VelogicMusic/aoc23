@@ -5,14 +5,33 @@ import util.Input
 import util.PuzzleInput
 import util.TestInput
 
+/**
+ *  Store the return value and execution time
+ */
+data class Output(val returnValue: String, val time: Long)
+
+/**
+ * Builder-like class to execute specific days / inputs
+ */
 class Executor() {
     private val daysToExecute = mutableListOf<Day>()
     private val inputs = mutableListOf<Input>()
 
+    /**
+     * Add a [day] to the executor
+     */
     fun addDay(day: Day) = daysToExecute.add(day)
 
+    /**
+     * Add an [input] to the executor
+     */
     fun addInput(input: Input) = inputs.add(input)
 
+    /**
+     * Given [Day]s and [Input]s, execute them all in order
+     * Executes in order: Days -> Parts -> Test Input
+     * If all test inputs succeed, the puzzle input will be run
+     */
     fun execute() {
         val toRun =
             daysToExecute
@@ -35,6 +54,11 @@ class Executor() {
         }
     }
 
+    /**
+     * Run solve function for a given [input] on a [day] and log all results/states
+     * @param day [Day] to call solve on
+     * @param input the [Input] used
+     */
     private fun runWithLog(
         day: Day,
         input: Input,
@@ -61,6 +85,9 @@ class Executor() {
         return result.isSuccess()
     }
 
+    /**
+     * Runs [input] on a [day] and if the run was successful, stores the return value and execution time in an [Output] object
+     */
     private fun runInput(
         day: Day,
         input: Input,
@@ -81,4 +108,3 @@ class Executor() {
     }
 }
 
-data class Output(val returnValue: String, val time: Long)
