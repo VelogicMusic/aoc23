@@ -12,27 +12,28 @@ data class Galaxy(val x: Long, val y: Long) {
 class Day11 : Day(11) {
     override fun solvePart1(input: Input): String {
         val galaxies = parse(input)
-        val alreadySeen = mutableListOf<Galaxy>()
-        var sum = 0L
-        for (galaxy in galaxies) {
-            alreadySeen.add(galaxy)
-            sum += galaxies.filter { g -> g !in alreadySeen }.sumOf { g -> galaxy.minDistance(g) }
-        }
-        return sum.toString()
+        return distances(galaxies).toString()
     }
 
     override fun solvePart2(input: Input): String {
-        val galaxies = parse(input, 1_000_000 - 1)
+        val galaxies = parse(input, 1000000 - 1)
+        return distances(galaxies).toString()
+    }
+
+    fun distances(galaxies: List<Galaxy>): Long {
         val alreadySeen = mutableListOf<Galaxy>()
         var sum = 0L
         for (galaxy in galaxies) {
             alreadySeen.add(galaxy)
             sum += galaxies.filter { g -> g !in alreadySeen }.sumOf { g -> galaxy.minDistance(g) }
         }
-        return sum.toString()
+        return sum
     }
 
-    private fun parse(input: Input, dist: Long = 1): List<Galaxy> {
+    private fun parse(
+        input: Input,
+        dist: Long = 1,
+    ): List<Galaxy> {
         val galaxies = mutableListOf<Galaxy>()
         val emptyRows = input.lines.withIndex().filter { (_, row) -> row.all { c -> c == '.' } }.map { (index, _) -> index.toLong() }
         val emptyCols =
