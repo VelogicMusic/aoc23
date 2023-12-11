@@ -1,9 +1,6 @@
-package util.executor
+package util
 
 import solutions.Day
-import util.Input
-import util.PuzzleInput
-import util.TestInput
 
 /**
  *  Store the return value and execution time

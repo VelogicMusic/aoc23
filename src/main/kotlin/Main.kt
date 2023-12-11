@@ -8,8 +8,9 @@ import solutions.Day06
 import solutions.Day07
 import solutions.Day08
 import solutions.Day09
+import solutions.Day10
+import util.Executor
 import util.InputReader
-import util.executor.Executor
 
 fun main(args: Array<String>) {
     val arguments = argparse(args.toList())
@@ -24,6 +25,7 @@ fun main(args: Array<String>) {
             Day07(),
             Day08(),
             Day09(),
+            Day10(),
         ).mapIndexed { index: Int, day: Day -> index + 1 to day }.toMap()
 
     val executor = Executor()

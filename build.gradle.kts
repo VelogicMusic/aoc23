@@ -8,9 +8,11 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+    maven("https://jitpack.io")
 }
 
 dependencies {
+    implementation("com.github.jkcclemens:khttp:-SNAPSHOT")
     testImplementation(kotlin("test"))
 }
 
@@ -25,3 +27,4 @@ kotlin {
 application {
     mainClass.set("MainKt")
 }
+

@@ -1,4 +1,4 @@
-package util.executor
+package util
 
 /**
  * Simple Result Monad Implementation used to get results when executing functions
@@ -11,9 +11,9 @@ sealed class Result<out T> {
     companion object {
         fun <T> of(block: () -> T): Result<T> =
             try {
-                Result.Success(block())
+                Success(block())
             } catch (exception: Exception) {
-                Result.Failure(exception.message ?: "Unknown error")
+                Failure(exception.message ?: "Unknown error")
             }
 
         fun <T> success(value: T) = Success(value)
