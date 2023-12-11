@@ -36,16 +36,14 @@ data class Graph(val nodes: Set<Node>, val edges: HashMap<Node, List<Node>>) {
                 .map { (_, nodes) -> nodes.sortedBy { node -> node.x } }
                 .map { nodes ->
                     nodes.takeLast(nodes.size - 1).fold(listOf(nodes.first())) { nodeList, node ->
-                        if (node.symbol == '|') {
-                            nodeList + listOf(node)
-                        } else if (node.x - nodeList.last().x == 1 && nodeList.last().symbol != '|') {
-                            nodeList.take(nodeList.size - 1) + listOf(node)
-                        } else {
-                            nodeList + listOf(node)
+                        when (node.symbol) {
+                            '|', 'F', 'L' -> nodeList + listOf(node)
+                            '7' -> if (nodeList.last().symbol == 'F') nodeList.take(nodeList.size - 1) else nodeList
+                            'J' -> if (nodeList.last().symbol == 'L') nodeList.take(nodeList.size - 1) else nodeList
+                            else -> nodeList
                         }
                     }.toSet()
-                }.onEach { println(it) }
-                .flatten().toList()
+                }.flatten().toList()
         return nodes
             .filter { node -> node !in loop }
             .groupBy { node -> node.y }
@@ -60,7 +58,7 @@ data class Graph(val nodes: Set<Node>, val edges: HashMap<Node, List<Node>>) {
                             n.y == y && n.x < node.x
                         } % 2 == 1
                     )
-                }.also { println("$y $it") }
+                }
             }.sum()
     }
 }
