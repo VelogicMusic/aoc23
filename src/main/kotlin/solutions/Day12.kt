@@ -3,7 +3,7 @@ package solutions
 import util.Input
 
 data class ConditionRecord(val springs: String, val damages: List<Long>) {
-    val cache = HashMap<Pair<String, List<Long>>, Long>()
+    private val cache = HashMap<Pair<String, List<Long>>, Long>()
 
     fun getCombinationSum(): Long = getCombinations(springs, damages)
 
@@ -19,18 +19,14 @@ data class ConditionRecord(val springs: String, val damages: List<Long>) {
         }
 
         return cache.getOrPut(s to d) {
-            0L.let { if (s.first() != '#') getCombinations(s.drop(1), d) else it }
-                .let { res ->
-                    if (s.first() != '.' && d.first() <= s.length &&
-                        s.take(d.first().toInt()).all {
-                            it != '.'
-                        } && ((d.first() < s.length && s[d.first().toInt()] != '#') || d.first() == s.length.toLong())
-                    ) {
-                        res + getCombinations(s.drop(d.first().toInt() + 1), d.drop(1))
-                    } else {
-                        res
-                    }
+            var result = 0L
+            result += if (s.first() != '#') getCombinations(s.drop(1), d) else 0
+            if (s.first() != '.' && d.first() <= s.length && s.take(d.first().toInt()).all { it != '.' }) {
+                if ((d.first() < s.length && s[d.first().toInt()] != '#') || d.first() == s.length.toLong()) {
+                    result += getCombinations(s.drop(d.first().toInt() + 1), d.drop(1))
                 }
+            }
+            result
         }
     }
 }
