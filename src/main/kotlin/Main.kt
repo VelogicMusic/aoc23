@@ -10,6 +10,7 @@ import solutions.Day08
 import solutions.Day09
 import solutions.Day10
 import solutions.Day11
+import solutions.Day12
 import util.Executor
 import util.InputReader
 
@@ -28,6 +29,7 @@ fun main(args: Array<String>) {
             Day09(),
             Day10(),
             Day11(),
+            Day12(),
         ).mapIndexed { index: Int, day: Day -> index + 1 to day }.toMap()
 
     val executor = Executor()
