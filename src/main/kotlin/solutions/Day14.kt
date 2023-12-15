@@ -2,33 +2,75 @@ package solutions
 
 import util.Input
 
+data class ReflectorDish(val dish: List<String>) {
+    val score: Int
+        get() =
+            dish.withIndex().sumOf { (index, row) ->
+                (dish.size - index) * row.count { it == 'O' }
+            }
+
+    fun moveLeft(): ReflectorDish {
+        val movedDish =
+            dish.map { line ->
+                line.split("#").map { it.toList().sorted().reversed().joinToString("") }
+            }.map { substrings -> substrings.joinToString("#") }
+        return ReflectorDish(movedDish)
+    }
+
+    fun getTransposition(): ReflectorDish {
+        val transposedDish = mutableListOf<String>()
+        val mergedDish = dish.joinToString("")
+        for (i in dish.first().indices) {
+            transposedDish.add(
+                mergedDish.filterIndexed { index, _ -> index % dish.first().length == i },
+            )
+        }
+        return ReflectorDish(transposedDish)
+    }
+
+    fun flip(): ReflectorDish {
+        return ReflectorDish(dish.map { row -> row.reversed() })
+    }
+}
+
 class Day14 : Day(14) {
     override fun solvePart1(input: Input): String {
-        return score(transpose(moveLeft(transpose(input.lines)))).toString()
+        return ReflectorDish(input.lines)
+            .getTransposition()
+            .moveLeft()
+            .getTransposition()
+            .score
+            .toString()
     }
 
     override fun solvePart2(input: Input): String {
-        return ""
-    }
+        var currentDish = ReflectorDish(input.lines)
 
-    fun score(input: List<String>): Int {
-        return input.withIndex().sumOf { (index, row) -> (input.size - index) * row.count { it == 'O' } }
-    }
+        val hashSet = HashSet<ReflectorDish>().also { it.add(currentDish) }
+        val reflectorDishList = mutableListOf(currentDish)
+        var index = 0
 
-    fun transpose(input: List<String>): List<String> {
-        val transposedPattern = mutableListOf<String>()
-        val mergedPattern = input.joinToString("")
-        for (i in input.first().indices) {
-            transposedPattern.add(mergedPattern.filterIndexed { index, _ -> index % input.first().length == i })
-        }
-        return transposedPattern
-    }
-
-    private fun moveLeft(input: List<String>): List<String> {
-        return input
-            .map { line ->
-                line.split("#").map { it.toList().sorted().reversed().joinToString("") }
+        while (true) {
+            index++
+            currentDish = cycle(currentDish)
+            if (currentDish in hashSet) {
+                val initialIndex = reflectorDishList.indexOf(currentDish)
+                val cycleLength = index - initialIndex
+                val cycleOffset = (1_000_000_000 - initialIndex) % cycleLength
+                val score = reflectorDishList[cycleOffset + initialIndex].score
+                return score.toString()
+            } else {
+                hashSet.add(currentDish)
+                reflectorDishList.add(currentDish)
             }
-            .map { substrings -> substrings.joinToString("#") }
+        }
+    }
+
+    private fun cycle(reflectorDish: ReflectorDish): ReflectorDish {
+        var dish = reflectorDish
+        for (i in 0..3) {
+            dish = dish.getTransposition().moveLeft().flip()
+        }
+        return dish
     }
 }
