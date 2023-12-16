@@ -22,6 +22,13 @@ sealed class Result<out T> {
     }
 }
 
+val <T> Result<T>.isSuccess: Boolean
+    get() =
+        when (this) {
+            is Result.Success -> true
+            is Result.Failure -> false
+        }
+
 fun <T> Result<T>.onSuccess(action: (T) -> Unit): Result<T> =
     when (this) {
         is Result.Success -> apply { action(value) }
@@ -32,10 +39,4 @@ fun <T> Result<T>.onError(action: (Result.Failure) -> Unit): Result<T> =
     when (this) {
         is Result.Success -> this
         is Result.Failure -> apply { action(this) }
-    }
-
-fun <T> Result<T>.isSuccess(): Boolean =
-    when (this) {
-        is Result.Success -> true
-        is Result.Failure -> false
     }

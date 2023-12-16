@@ -1,6 +1,7 @@
 package util
 
 import solutions.Day
+import util.aocintegration.Submitter
 
 /**
  *  Store the return value and execution time
@@ -27,9 +28,9 @@ class Executor() {
     /**
      * Given [Day]s and [Input]s, execute them all in order
      * Executes in order: Days -> Parts -> Test Input
-     * If all test inputs succeed, the puzzle input will be run
+     * If all test inputs succeed the puzzle input will be run
      */
-    fun execute() {
+    fun execute(submitter: Submitter) {
         val toRun =
             daysToExecute
                 .sortedBy { day -> day.currentDay }
@@ -40,11 +41,15 @@ class Executor() {
                 val passedTests =
                     inputs.filterIsInstance<TestInput>()
                         .filter { input -> input.part == part }
-                        .all { input -> runWithLog(day, input) }
+                        .all { input -> runWithLog(day, input).isSuccess }
                 if (passedTests) {
                     inputs.filterIsInstance<PuzzleInput>()
                         .filter { input -> input.part == part }
-                        .forEach { input -> runWithLog(day, input) }
+                        .forEach { input ->
+                            runWithLog(day, input).let { output ->
+                                output.onSuccess { answer -> submitter.submitAnswer(day.currentDay, part, answer.returnValue) }
+                            }
+                        }
                 }
                 println()
             }
@@ -59,7 +64,7 @@ class Executor() {
     private fun runWithLog(
         day: Day,
         input: Input,
-    ): Boolean {
+    ): Result<Output> {
         val result: Result<Output>
         when (input) {
             is TestInput -> {
@@ -79,7 +84,7 @@ class Executor() {
                 }
             }
         }
-        return result.isSuccess()
+        return result
     }
 
     /**
@@ -104,4 +109,3 @@ class Executor() {
         }
     }
 }
-

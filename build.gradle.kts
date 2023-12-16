@@ -28,3 +28,6 @@ application {
     mainClass.set("MainKt")
 }
 
+tasks.getByName("run", JavaExec::class) {
+    standardInput = System.`in`
+}

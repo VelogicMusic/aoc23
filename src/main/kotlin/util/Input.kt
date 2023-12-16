@@ -1,5 +1,6 @@
 package util
 
+import util.aocintegration.InputFetcher
 import java.io.File
 import kotlin.streams.toList
 
@@ -22,7 +23,7 @@ enum class Part {
 
 /**
  * Base class for inputs
- * @param day day corresponding to input
+ * @param day [Day] corresponding to input
  * @param part corresponding [Part] for input
  * @param fileName path of the input file
  */
@@ -58,12 +59,20 @@ object InputReader {
      * Gets all input files for a given [day]
      * @param day specify the date for input files
      */
-    fun getInputs(day: Int): List<Input> {
+    fun getInputs(
+        day: Int,
+        inputFetcher: InputFetcher,
+    ): List<Input> {
         val dayString = day.toString().padStart(2, '0')
+        val puzzleInputFile = "$RESOURCE_DIR/day$dayString/input"
+        if (!File(puzzleInputFile).exists()) {
+            inputFetcher.fetchInput(day, puzzleInputFile)
+        }
         val puzzleInputs =
-            "$RESOURCE_DIR/day$dayString/input".let { fileName ->
-                listOf(PuzzleInput(day, Part.PART_1, fileName), PuzzleInput(day, Part.PART_2, fileName))
-            }
+            listOf(
+                PuzzleInput(day, Part.PART_1, puzzleInputFile),
+                PuzzleInput(day, Part.PART_2, puzzleInputFile),
+            )
 
         val testInputs = mutableListOf<TestInput>()
         val testDirectories =
