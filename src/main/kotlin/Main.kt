@@ -14,6 +14,7 @@ import solutions.Day13
 import solutions.Day14
 import solutions.Day15
 import solutions.Day16
+import solutions.Day17
 import util.Executor
 import util.InputReader
 import util.aocintegration.InputFetcher
@@ -41,6 +42,7 @@ fun main(args: Array<String>) {
             Day14(),
             Day15(),
             Day16(),
+            Day17(),
         ).associateBy { day -> day.currentDay }
 
     val cookie =

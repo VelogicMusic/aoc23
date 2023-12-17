@@ -21,5 +21,9 @@ class InputFetcher(val requestHandler: RequestHandler) {
     private fun writeToFile(
         filePath: String,
         content: String,
-    ) = File(filePath).bufferedWriter().use { out -> out.write(content) }
+    ) {
+        val directory = filePath.substringBefore("/input")
+        File(directory).mkdir()
+        File(filePath).bufferedWriter().use { out -> out.write(content) }
+    }
 }
