@@ -14,3 +14,5 @@ out/
 !**/src/test/**/out/
 
 session.cookie
+
+*.db
